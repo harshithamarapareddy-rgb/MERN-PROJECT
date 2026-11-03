@@ -1,175 +1,248 @@
-<%@include file="adminheader.jsp" %><%!
-    PreparedStatement ps=null;
-    ResultSet rs=null;
-    String userid,pwd,utype;
-    int k=0;
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@include file="adminheader.jsp" %>
+
+<%!
+PreparedStatement ps = null;
+int k = 0;
 %>
-<h1 class="page-header">New <small>City</small></h1>
+
+<style>
+    .ss-city-create {
+        max-width: 750px;
+        margin: 35px auto 55px;
+        padding: 0 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    .ss-city-heading {
+        color: #14233f;
+        font-size: 30px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .ss-city-subtitle {
+        color: #778197;
+        margin-bottom: 25px;
+        font-size: 14px;
+    }
+
+    .ss-city-card {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 30px;
+        box-shadow: 0 5px 25px rgba(20,35,63,0.09);
+        border: 1px solid #edf0f5;
+    }
+
+    .ss-city-card h3 {
+        color: #14233f;
+        font-size: 21px;
+        margin: 0 0 8px;
+        font-weight: 700;
+    }
+
+    .ss-city-card p {
+        color: #7b8495;
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    .ss-city-label {
+        display: block;
+        color: #263653;
+        font-weight: 600;
+        margin-bottom: 9px;
+        font-size: 14px;
+    }
+
+    .ss-city-input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 13px 15px;
+        border: 1px solid #dce2eb;
+        border-radius: 8px;
+        outline: none;
+        font-size: 15px;
+        transition: 0.3s;
+    }
+
+    .ss-city-input:focus {
+        border-color: #ff872f;
+        box-shadow: 0 0 0 3px rgba(255,135,47,0.12);
+    }
+
+    .ss-city-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 25px;
+        flex-wrap: wrap;
+    }
+
+    .ss-city-btn {
+        display: inline-block;
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        border: none;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .ss-city-submit {
+        background: #ff872f;
+        color: #ffffff;
+    }
+
+    .ss-city-submit:hover {
+        background: #e96f18;
+        color: #ffffff;
+    }
+
+    .ss-city-view {
+        background: #14233f;
+        color: #ffffff;
+    }
+
+    .ss-city-view:hover {
+        background: #243d66;
+        color: #ffffff;
+    }
+
+    .ss-city-message {
+        text-align: center;
+        background: #ffffff;
+        padding: 35px 25px;
+        margin: 35px auto;
+        max-width: 550px;
+        border-radius: 14px;
+        box-shadow: 0 5px 25px rgba(20,35,63,0.09);
+        color: #14233f;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .ss-city-message a {
+        display: inline-block;
+        margin-top: 18px;
+        background: #ff872f;
+        color: white;
+        text-decoration: none;
+        padding: 10px 25px;
+        border-radius: 7px;
+        font-size: 14px;
+    }
+
+    @media(max-width:600px) {
+        .ss-city-card {
+            padding: 22px;
+        }
+
+        .ss-city-heading {
+            font-size: 25px;
+        }
+    }
+</style>
+
 <%
-    if(request.getParameter("submit1")==null) {
+if(request.getParameter("submit1") == null) {
 %>
 
-    <title>Online Classified Shop - New City Registration</title>
-  
-    <style>
-        /* Container styling for margin and padding */
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+<div class="ss-city-create">
 
-        /* Header styling */
-        .page-header {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e5e5e5;
-            padding-bottom: 10px;
-        }
 
-        .page-header small {
-            font-size: 1.5rem;
-            color: #6c757d;
-        }
+<h1 class="ss-city-heading">City Management</h1>
+<p class="ss-city-subtitle">
+    Add and manage the cities available in SHOP SPHERE.
+</p>
 
-        /* Right-aligned link styling */
-        .text-right {
-            text-align: right;
-        }
+<div class="ss-city-card">
 
-        .mb-3 {
-            margin-bottom: 1.5rem;
-        }
+    <h3>Create New City</h3>
+    <p>Enter the city name to add it to the city directory.</p>
 
-        /* Styling for the anchor link as a button */
-        .btn-outline-info {
-            color: #17a2b8;
-            border: 1px solid #17a2b8;
-            padding: 8px 16px;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background-color 0.3s, color 0.3s;
-        }
+    <form name="f" action="cities.jsp" method="post">
 
-        .btn-outline-info:hover {
-            background-color: #17a2b8;
-            color: white;
-        }
+        <label class="ss-city-label">City Name</label>
 
-        /* Table styling */
-        .table-bordered {
-            width: 100%;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            background-color: #fff;
-        }
+        <input type="text"
+               name="city"
+               class="ss-city-input"
+               placeholder="Enter city name"
+               required
+               autofocus>
 
-        /* Header styling within the table */
-        .thead-dark th {
-            background-color: #343a40;
-            color: #fff;
-            text-align: center;
-        }
+        <div class="ss-city-actions">
 
-        /* Form input field styling */
-        .form-control {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-top: 5px;
-        }
+            <button type="submit"
+                    name="submit1"
+                    value="Create"
+                    class="ss-city-btn ss-city-submit">
+                + Create City
+            </button>
 
-        /* Button styling */
-        .btn-success {
-            color: #fff;
-            background-color: #28a745;
-            border-color: #28a745;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s, transform 0.3s;
-        }
+            <a href="avcities.jsp"
+               class="ss-city-btn ss-city-view">
+                View Cities
+            </a>
 
-        .btn-success:hover {
-            background-color: #218838;
-            transform: translateY(-2px);
-        }
-    </style>
-
-    <div class="container my-4">
-
-        <!-- Right-aligned link to view cities -->
-        <div class="text-right mb-3">
-            <a href="avcities.jsp" class="btn btn-outline-info">View Cities</a>
         </div>
-        
-        <!-- Form for adding a new city -->
-        <form name="f" action="cities.jsp" method="post" class="form-horizontal">
-            <table class="table table-bordered login_tab">
-                <thead class="thead-dark">
-                    <tr>
-                        <th colspan="2" class="text-center">NEW CITY</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>City Name</th>
-                        <td>
-                            <input type="text" name="city" class="form-control" required autofocus>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="2" class="text-center">
-                            <input type="submit" name="submit1" value="Create" class="btn btn-success">
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </form>
-    </div>
-    <script src="js/bootstrap.min.js"></script> <!-- Bootstrap JS -->
+
+    </form>
+
+</div>
+```
+
+</div>
+
+<%
+} else {
 
 
-<!--<div class="right">
+    try {
+        ps = conn.prepareStatement(
+            "insert into cities(city) values(?)"
+        );
+
+        ps.setString(1, request.getParameter("city"));
+        k = ps.executeUpdate();
+
+        if(k > 0) {
+
+
+%>
+
+<div class="ss-city-message">
+    City Added Successfully!
+    <br>
+    <a href="cities.jsp">Add Another City</a>
     <a href="avcities.jsp">View Cities</a>
 </div>
-            <form name="f" action="cities.jsp" method="post">
-                <table class="login_tab">
-                    <thead>
-                        <tr>
-                            <th colspan="2">NEW CITY</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th>City Name</th>
-                            <td><input type="text" name="city" required autofocus></td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="2">
-                                <input type="submit" name="submit1" value="Create">
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </form>-->
+
 <%
-    } else {                   
-            ps = conn.prepareStatement("insert into cities(city) values(?)");
-            ps.setString(1, request.getParameter("city"));
-        try {
-            k = ps.executeUpdate();
-        } catch(Exception e) {}
-                if(k>0)
-                out.print("<div class='center'>City Stored...!<br><a href='cities.jsp'>Back</a></div>");
-                else
-                out.print("<div class='center'>Duplicate Name...!<br><a href='cities.jsp'>Back</a></div>");
-            ps.close();
-    }  
-%><%@include file="footer.jsp" %>
+}
+
+
+    } catch(Exception e) {
+
+
+%>
+
+<div class="ss-city-message">
+    City could not be added. Please check whether the city already exists.
+    <br>
+    <a href="cities.jsp">Go Back</a>
+</div>
+
+<%
+} finally {
+if(ps != null) {
+try { ps.close(); } catch(Exception e) {}
+}
+}
+}
+%>
+
+<%@include file="footer.jsp" %>

@@ -1,337 +1,381 @@
-<%@include file="shopheader.jsp" %><%!
+<%@include file="shopheader.jsp" %>
+
+<%!
     PreparedStatement ps1 = null;
     ResultSet rs1 = null;
-    String cname, brand, modelname, specs, price, discount, oprice;
-    int k = 0;
 %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Product</title>
-    <style>
-        .page-header {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 10px;
-        }
 
-        .page-header small {
-            font-size: 1.5rem;
-            color: #6c757d;
-        }
+<title>SHOP SPHERE | Add Product</title>
 
-        .login_table {
-            width: 100%;
-            margin: 0 auto;
-            border-collapse: collapse;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            overflow: hidden;
-        }
+<style>
 
-        .login_table thead th {
-            background-color: #6EACDA;
-            color: white;
-            padding: 15px;
-            text-align: left;
-        }
+.ss-product-page {
+    padding: 35px 10px 60px;
+    font-family: Arial, sans-serif;
+}
 
-        .login_table th, .login_table td {
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
-        }
+.ss-product-heading {
+    margin-bottom: 30px;
+}
 
-        .login_table tr:hover {
-            background-color: #f4f4f4;
-        }
+.ss-product-heading h1 {
+    color: #14233f;
+    font-size: 34px;
+    font-weight: 800;
+}
 
-        .center {
-            text-align: center;
-        }
+.ss-product-heading p {
+    color: #7d8798;
+    font-size: 15px;
+}
 
-        .input-file {
-            border: 1px solid #ccc;
-            padding: 5px;
-        }
+.ss-orange {
+    color: #ff872f;
+}
 
-        .right {
-            margin-bottom: 15px;
-        }
+.ss-view-btn {
+    display: inline-block;
+    background: #14233f;
+    color: white !important;
+    padding: 12px 22px;
+    border-radius: 8px;
+    text-decoration: none !important;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
 
-        .center {
-            margin-top: 20px;
-        }
-        .button-container {
-            text-align: center; /* Centers the button horizontally */
-        }
-        .btn {
-        background-color: #007bff;
-        color: white;
-        border: 1px solid #007bff;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
+.ss-view-btn:hover {
+    background: #ff872f;
+}
+
+.ss-product-card {
+    background: white;
+    border-radius: 16px;
+    padding: 35px;
+    box-shadow: 0 8px 30px rgba(20,35,63,0.09);
+    border-top: 5px solid #ff872f;
+}
+
+.ss-section-title {
+    color: #14233f;
+    font-size: 21px;
+    font-weight: 800;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #e8edf4;
+    padding-bottom: 15px;
+}
+
+.ss-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+}
+
+.ss-form-group {
+    margin-bottom: 18px;
+}
+
+.ss-form-group.full {
+    grid-column: 1 / -1;
+}
+
+.ss-form-group label {
+    display: block;
+    color: #14233f;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.ss-form-group input,
+.ss-form-group select,
+.ss-form-group textarea {
+    width: 100%;
+    padding: 14px;
+    box-sizing: border-box;
+    background: #f3f6fb;
+    border: 1px solid #e1e7f1;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    color: #14233f;
+}
+
+.ss-form-group input:focus,
+.ss-form-group select:focus,
+.ss-form-group textarea:focus {
+    border-color: #ff872f;
+    box-shadow: 0 0 0 3px rgba(255,135,47,0.10);
+}
+
+.ss-form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.ss-image-box {
+    background: #f8f9fc;
+    border: 1px dashed #c5cedd;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 15px;
+}
+
+.ss-image-box label {
+    color: #14233f;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.ss-image-box input {
+    width: 100%;
+}
+
+.ss-required {
+    color: #ff872f;
+}
+
+.ss-publish-btn {
+    width: 100%;
+    padding: 17px;
+    background: #ff872f;
+    border: none;
+    border-radius: 9px;
+    color: white;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: 0.3s;
+}
+
+.ss-publish-btn:hover {
+    background: #14233f;
+    transform: translateY(-2px);
+}
+
+.ss-note {
+    background: #fff5ed;
+    border-left: 4px solid #ff872f;
+    padding: 15px;
+    color: #555;
+    font-size: 13px;
+    margin-bottom: 25px;
+    border-radius: 5px;
+}
+
+@media(max-width: 650px) {
+    .ss-form-grid {
+        grid-template-columns: 1fr;
     }
 
-    .btn:hover {
-        background-color: #0056b3;
-        border-color: #0056b3;
+    .ss-form-group.full {
+        grid-column: auto;
     }
-    </style>
-</head>
-<body>
-    <h1 class="page-header">New <small>Product</small></h1>
-    <%
-        if (request.getParameter("submit1") == null) {
+
+    .ss-product-card {
+        padding: 20px;
+    }
+
+    .ss-product-heading h1 {
+        font-size: 27px;
+    }
+}
+
+</style>
+
+<div class="ss-product-page">
+
+    <div class="ss-product-heading">
+
+        <h1>Add New <span class="ss-orange">Product</span></h1>
+
+        <p>Showcase your products and grow your business with SHOP SPHERE.</p>
+
+    </div>
+
+    <a href="shvproducts.jsp" class="ss-view-btn">
+        View Your Products &#8594;
+    </a>
+
+    <div class="ss-product-card">
+
+        <div class="ss-section-title">
+            Product Information
+        </div>
+
+        <div class="ss-note">
+            Fill in the product details carefully.
+            Fields marked with * are mandatory.
+        </div>
+
+        <%
             ps1 = conn.prepareStatement("SELECT cname FROM categories");
             rs1 = ps1.executeQuery();
-    %>
-    <div class="right">
-        <a href="shvproducts.jsp" class="btn btn-outline-info">View Products</a>
+        %>
+
+        <form name="f"
+              action="shophome1.jsp"
+              method="post"
+              enctype="multipart/form-data">
+
+            <div class="ss-form-grid">
+
+                <div class="ss-form-group">
+
+                    <label>Product Category <span class="ss-required">*</span></label>
+
+                    <select name="cname" required>
+
+                        <%
+                            while(rs1.next()) {
+                        %>
+
+                        <option value="<%=rs1.getString(1)%>">
+                            <%=rs1.getString(1)%>
+                        </option>
+
+                        <%
+                            }
+                            rs1.close();
+                            ps1.close();
+                        %>
+
+                    </select>
+
+                </div>
+
+                <div class="ss-form-group">
+
+                    <label>Brand Name <span class="ss-required">*</span></label>
+
+                    <input type="text"
+                           name="brand"
+                           placeholder="Enter brand name"
+                           required>
+
+                </div>
+
+                <div class="ss-form-group">
+
+                    <label>Model Name <span class="ss-required">*</span></label>
+
+                    <input type="text"
+                           name="modelname"
+                           placeholder="Enter product model"
+                           required>
+
+                </div>
+
+                <div class="ss-form-group">
+
+                    <label>Price (?) <span class="ss-required">*</span></label>
+
+                    <input type="number"
+                           name="price"
+                           placeholder="Enter product price"
+                           min="1"
+                           step="0.01"
+                           required>
+
+                </div>
+
+                <div class="ss-form-group">
+
+                    <label>Discount (%) <span class="ss-required">*</span></label>
+
+                    <input type="number"
+                           name="discount"
+                           placeholder="Enter discount percentage"
+                           min="0"
+                           max="100"
+                           step="0.01"
+                           required>
+
+                </div>
+
+                <div class="ss-form-group full">
+
+                    <label>Product Specifications <span class="ss-required">*</span></label>
+
+                    <textarea name="specs"
+                              placeholder="Describe your product features, specifications and details..."
+                              required></textarea>
+
+                </div>
+
+            </div>
+
+            <div class="ss-section-title" style="margin-top:30px;">
+                Product Images
+            </div>
+
+            <div class="ss-form-grid">
+
+                <div class="ss-image-box">
+
+                    <label>Product Image 1 *</label>
+                    <input type="file" name="img1" accept="image/*" required>
+
+                </div>
+
+                <div class="ss-image-box">
+
+                    <label>Product Image 2 *</label>
+                    <input type="file" name="img2" accept="image/*" required>
+
+                </div>
+
+                <div class="ss-image-box">
+
+                    <label>Product Image 3 *</label>
+                    <input type="file" name="img3" accept="image/*" required>
+
+                </div>
+
+                <div class="ss-image-box">
+
+                    <label>Product Image 4 *</label>
+                    <input type="file" name="img4" accept="image/*" required>
+
+                </div>
+
+                <div class="ss-image-box">
+
+                    <label>Product Image 5 (Optional)</label>
+                    <input type="file" name="img5" accept="image/*">
+
+                </div>
+
+            </div>
+
+            <div class="ss-section-title" style="margin-top:30px;">
+                Shop Location
+            </div>
+
+            <div class="ss-form-group">
+
+                <label>Google Maps URL <span class="ss-required">*</span></label>
+
+                <textarea name="gmap"
+                          placeholder="Paste your Google Maps location URL here..."
+                          required></textarea>
+
+            </div>
+
+            <button type="submit"
+                    name="submit1"
+                    class="ss-publish-btn">
+
+                PUBLISH PRODUCT &#8594;
+
+            </button>
+
+        </form>
+
     </div>
-    <form name="f" action="shophome1.jsp" method="post" enctype="multipart/form-data">
-        <table class="login_table">
-            <thead>
-                <tr>
-                    <th colspan="2">NEW PRODUCT</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th width="40%">Product Category *</th>
-                    <td>
-                        <select name="cname" required>
-                            <%
-                                while (rs1.next()) {
-                                    out.print("<option value='" + rs1.getString(1) + "'>" + rs1.getString(1) + "</option>");
-                                }
-                                ps1.close();
-                            %>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Brand Name *</th>
-                    <td><input type="text" name="brand" required autofocus></td>
-                </tr>
-                <tr>
-                    <th>Model Name *</th>
-                    <td><input type="text" name="modelname" required></td>
-                </tr>
-                <tr>
-                    <th>Product Specifications *</th>
-                    <td><textarea name="specs" cols="30" rows="3" required></textarea></td>
-                </tr>
-                <tr>
-                    <th>Price *</th>
-                    <td><input type="text" name="price" required pattern="\\d+"></td>
-                </tr>
-                <tr>
-                    <th>Discount % *</th>
-                    <td><input type="text" name="discount" required pattern="\\d+(\\.\\d+)?"></td>
-                </tr>
-                <tr>
-                    <th>Product Image 1 *</th>
-                    <td><input type="file" name="img1" class="input-file" required></td>
-                </tr>
-                <tr>
-                    <th>Product Image 2 *</th>
-                    <td><input type="file" name="img2" class="input-file" required></td>
-                </tr>
-                <tr>
-                    <th>Product Image 3 *</th>
-                    <td><input type="file" name="img3" class="input-file" required></td>
-                </tr>
-                <tr>
-                    <th>Product Image 4 *</th>
-                    <td><input type="file" name="img4" class="input-file" required></td>
-                </tr>
-                <tr>
-                    <th>Product Image 5 *</th>
-                    <td><input type="file" name="img5" class="input-file"></td>
-                </tr>
-                <tr>
-                    <th>Google Map URL *</th>
-                    <td><textarea name="gmap" cols="30" required></textarea></td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="2" class="button-container">
-                        <input class="btn btn-outline-info" type="submit" name="submit1" value="Create">
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </form>
-    <%
-        } else {
-            cname = request.getParameter("cname");
-            brand = request.getParameter("brand");
-            modelname = request.getParameter("modelname");
-            specs = request.getParameter("specs");
-            price = request.getParameter("price");
-            discount = request.getParameter("discount");
 
-            // Calculate the offer price
-            java.text.NumberFormat nf = java.text.NumberFormat.getInstance();
-            nf.setMaximumFractionDigits(0);
-            float disc_price = Float.parseFloat(price) - (Float.parseFloat(price) * Float.parseFloat(discount) / 100);
-            oprice = nf.format(disc_price);
-
-            try {
-                ps1 = conn.prepareStatement("INSERT INTO newproducts(shopid, cname, brand, modelname, specs, price, discount, oprice) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-                ps1.setString(1, session.getAttribute("shopid").toString().trim());
-                ps1.setString(2, cname);
-                ps1.setString(3, brand);
-                ps1.setString(4, modelname);
-                ps1.setString(5, specs);
-                ps1.setString(6, price);
-                ps1.setString(7, discount);
-                ps1.setString(8, oprice);
-                k = ps1.executeUpdate();
-
-                if (k > 0) {
-                    out.print("<div class='center'>Product Stored Successfully!<br><a href='shophome.jsp'>Back</a></div>");
-                } else {
-                    out.print("<div class='center'>Failed to Store Product...!<br><a href='shophome.jsp'>Back</a></div>");
-                }
-            } catch (Exception e) {
-                out.print("<div class='center'>An error occurred: " + e.getMessage() + "<br><a href='shophome.jsp'>Back</a></div>");
-            } finally {
-                if (ps1 != null) {
-                    ps1.close();
-                }
-            }
-        }
-    %>
-    <%@include file="footer.jsp" %>
-</body>
-</html>
-
-
-<%--<%@include file="shopheader.jsp" %><%!
-    PreparedStatement ps1=null;
-    ResultSet rs1=null;
-    String cname,brand,modelname,specs,price,discount,oprice;
-    int k=0;
-%>
-<h1 class="page-header">New <small>Product</small></h1>
-<%
-    if(request.getParameter("submit1")==null) {
-        ps1 = conn.prepareStatement("select cname from categories");
-        rs1 = ps1.executeQuery();
-%>
-<div class="right">
-    <a href="shvproducts.jsp">View Products</a>
 </div>
-<form name="f" action="shophome1.jsp" method="post" enctype="multipart/form-data">
-                <table class="login_tab" style="width:40%;">
-                    <thead>
-                        <tr>
-                            <th colspan="2">NEW PRODUCT</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th width="40%">Product Category</th>
-                            <td>
-                                <select name="cname" required>
-                            <%
-                                    while(rs1.next()) {
-                                        out.print("<option value='"+rs1.getString(1)+"'>"+rs1.getString(1)+"</option>");
-                                    }
-                                    ps1.close();
-                                %>
-                            </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Brand Name</th>
-                            <td><input type="text" name="brand" required autofocus></td>   
-                        </tr>
-                        <tr>
-                            <th>Model Name</th>
-                            <td><input type="text" name="modelname" required></td>   
-                        </tr>
-                        <tr>
-                            <th>Product <br>Specifications</th>
-                            <td><textarea name="specs" cols="30" rows="3" required></textarea></td>
-                        </tr>
-                        <tr>
-                            <th>Price</th>
-                            <td><input type="text" name="price" required pattern="\d+"></td>   
-                        </tr>
-                        <tr>
-                            <th>Discount %</th>
-                            <td><input type="text" name="discount" required pattern="\d+(\.\d+)?"></td>   
-                        </tr>
-                        <tr>
-                            <th>Product Image 1</th>
-                            <td><input type="file" name="img1" required></td>   
-                        </tr>
-                        <tr>
-                            <th>Product Image 2</th>
-                            <td><input type="file" name="img2" required></td>   
-                        </tr>
-                        <tr>
-                            <th>Product Image 3</th>
-                            <td><input type="file" name="img3" required></td>   
-                        </tr>
-                        <tr>
-                            <th>Product Image 4</th>
-                            <td><input type="file" name="img4" required></td>   
-                        </tr>
-                        <tr>
-                            <th>Product Image 5</th>
-                            <td><input type="file" name="img5"></td>   
-                        </tr>
-                        <tr>
-                            <th>Google Map URL</th>
-                            <td><textarea name="gmap" cols="30" required></textarea></td>   
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="2">
-                                <input type="submit" name="submit1" value="Create">
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </form>
-<%
-    } else {
-            cname = request.getParameter("cname");
-            brand = request.getParameter("brand");
-            modelname = request.getParameter("modelname");
-            specs = request.getParameter("specs");
-            price = request.getParameter("price");
-            discount = request.getParameter("discount");
-            java.text.NumberFormat nf = java.text.NumberFormat.getInstance();
-            nf.setMaximumFractionDigits(0);
-            float disc_price = Float.parseFloat(price)-(Float.parseFloat(price)*Float.parseFloat(discount)/100);
-            oprice = nf.format(disc_price);
-            ps1 = conn.prepareStatement("insert into newproducts(shopid,cname,brand,modelname,specs,price,discount,oprice) values(?,?,?,?,?,?,?,?)");
-            ps1.setString(1, session.getAttribute("shopid").toString().trim());
-            ps1.setString(2, cname);
-            ps1.setString(3, brand);
-            ps1.setString(4, modelname);
-            ps1.setString(5, specs);
-            ps1.setString(6, price);
-            ps1.setString(7, discount);
-            ps1.setString(8, oprice);
-        try {
-            k = ps1.executeUpdate();
-        } catch(Exception e) {}
-                if(k>0)
-                out.print("<div class='center'>Product Stored...!<br><a href='shophome.jsp'>Back</a></div>");
-                else
-                out.print("<div class='center'>Duplicate Product Name...!<br><a href='shophome.jsp'>Back</a></div>");
-            ps1.close();
-    }  
-%><%@include file="footer.jsp" %>--%>
+
+<%@include file="footer.jsp" %>

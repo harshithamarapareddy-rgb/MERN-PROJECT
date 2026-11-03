@@ -1,256 +1,373 @@
-<%@include file="header.jsp" %><%!
-    PreparedStatement ps1=null;
-    ResultSet rs1=null;
-    String name,addr,aname,city,mobile,userid,pwd;
-%>
-<h1 class="page-header">Seller <small>Registration</small></h1>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@include file="header.jsp" %>
+
+<style>
+    .ss-reg-wrapper {
+        max-width: 850px;
+        margin: 35px auto 55px;
+        padding: 0 15px;
+        font-family: Arial, sans-serif;
+    }
+
+    .ss-reg-heading {
+        color: #14233f;
+        font-size: 30px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+
+    .ss-reg-subtitle {
+        color: #7b8495;
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+    .ss-reg-card {
+        background: #ffffff;
+        padding: 35px;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(20,35,63,0.10);
+        border: 1px solid #edf0f5;
+    }
+
+    .ss-reg-card h3 {
+        color: #14233f;
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 25px;
+    }
+
+    .ss-reg-group {
+        margin-bottom: 18px;
+    }
+
+    .ss-reg-group label {
+        display: block;
+        color: #263653;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .ss-reg-group input,
+    .ss-reg-group textarea,
+    .ss-reg-group select {
+        width: 100%;
+        padding: 13px 14px;
+        border: 1px solid #dce2eb;
+        border-radius: 8px;
+        font-size: 14px;
+        outline: none;
+        background: #ffffff;
+        box-sizing: border-box;
+    }
+
+    .ss-reg-group input:focus,
+    .ss-reg-group textarea:focus,
+    .ss-reg-group select:focus {
+        border-color: #ff872f;
+        box-shadow: 0 0 0 3px rgba(255,135,47,0.12);
+    }
+
+    .ss-reg-group textarea {
+        min-height: 85px;
+        resize: vertical;
+    }
+
+    .ss-reg-submit {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        background: #ff872f;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 10px;
+    }
+
+    .ss-reg-submit:hover {
+        background: #e96f18;
+    }
+
+    .ss-reg-footer {
+        text-align: center;
+        margin-top: 22px;
+        color: #778197;
+        font-size: 14px;
+    }
+
+    .ss-reg-footer a {
+        color: #ff872f;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .ss-reg-message {
+        max-width: 550px;
+        margin: 50px auto;
+        padding: 35px;
+        background: #ffffff;
+        border-radius: 14px;
+        text-align: center;
+        box-shadow: 0 5px 25px rgba(20,35,63,0.10);
+        color: #14233f;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .ss-reg-message a {
+        display: inline-block;
+        margin: 15px 7px 0;
+        padding: 11px 23px;
+        background: #ff872f;
+        color: #ffffff;
+        border-radius: 7px;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    @media(max-width:600px) {
+        .ss-reg-card {
+            padding: 22px;
+        }
+
+        .ss-reg-heading {
+            font-size: 25px;
+        }
+    }
+</style>
+
 <%
-    if(request.getParameter("submit1")==null) {
-        ps1 = conn.prepareStatement("select city from cities");
-        rs1 = ps1.executeQuery();
+if(request.getParameter("submit1") == null) {
+
+
+    PreparedStatement cityPs = conn.prepareStatement("select city from cities");
+    ResultSet cityRs = cityPs.executeQuery();
+
+
 %>
 
-    <title>Seller Registration</title>
-    <style>
-        /* Styling the registration table */
-        .login_tab {
-            width: 500px;
-            border-collapse: collapse;
-            background-color: #ffffff;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-        }
+<div class="ss-reg-wrapper">
 
-        /* Styling the table header */
-        .login_tab thead th {
-            background-color: #41B3A2; /* Blue color for the seller registration form */
-            color: white;
-            text-align: center;
-            padding: 15px;
-            font-size: 18px;
-        }
+```
+<h1 class="ss-reg-heading">Join SHOP SPHERE</h1>
 
-        /* Styling table cells */
-        .login_tab th, .login_tab td {
-            padding: 10px;
-            text-align: left;
-        }
+<p class="ss-reg-subtitle">
+    Create your seller account and start selling with us.
+</p>
 
-        /* Styling input fields, textarea, and select */
-        input[type="text"], input[type="password"], select, textarea {
-            width: calc(100% - 22px);
-            padding: 8px;
-            margin: 5px 0;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
+<div class="ss-reg-card">
 
-        /* Styling the submit button */
-        input[type="submit"] {
-            width: 100%;
-            background-color: #41B3A2; /* Blue color for submit button */
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+    <h3>Seller Registration</h3>
 
-        /* Hover effect for submit button */
-        input[type="submit"]:hover {
-            background-color: #0D7C66; /* Darker blue on hover */
-        }
+    <form name="f" action="sregn.jsp" method="post"
+          onsubmit="return validateSellerForm();">
 
-        /* Responsive adjustments */
-        @media (max-width: 400px) {
-            .login_tab {
-                width: 90%;
-            }
-        }
-    </style>
-    <script>
-        function check() {
-            // Add any form validation checks here if needed
-            return true;
-        }
-    </script>
+        <div class="ss-reg-group">
+            <label>Full Name *</label>
+            <input type="text" name="name"
+                   placeholder="Enter your full name"
+                   required autofocus>
+        </div>
 
-    <form name="f" action="sregn.jsp" method="post" onsubmit="return check()">
-        <table class="login_tab">
-            <thead>
-                <tr>
-                    <th colspan="2">SELLER REGISTRATION</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>Name *</th>
-                    <td><input type="text" name="name" required autofocus></td>   
-                </tr>
-                <tr>
-                    <th>Address *</th>
-                    <td><textarea name="addr" required></textarea></td>
-                </tr>
-                <tr>
-                    <th>Area Name *</th>
-                    <td><input type="text" name="aname" required></td>   
-                </tr>
-                <tr>
-                    <th>City *</th>
-                    <td>
-                        <select name="city" required>
-                            <% while(rs1.next()) {
-                                out.print("<option value='"+rs1.getString(1)+"'>"+rs1.getString(1)+"</option>");
-                            }
-                            ps1.close(); %>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Mobile *</th>
-                    <td><input type="text" name="mobile" required maxlength="10"></td>
-                </tr>
-                <tr>
-                    <th>Email *(User Id)</th>
-                    <td><input type="text" name="email" required></td>
-                </tr>
-                <tr>
-                    <th>Password *</th>
-                    <td><input type="password" name="pwd" required></td>
-                </tr>                    
-                <tr>
-                    <th>Confirm Password *</th>
-                    <td><input type="password" name="cpwd" required></td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="2">
-                        <input type="submit" name="submit1" value="Register">
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+        <div class="ss-reg-group">
+            <label>Address *</label>
+            <textarea name="addr"
+                      placeholder="Enter your address"
+                      required></textarea>
+        </div>
+
+        <div class="ss-reg-group">
+            <label>Area Name *</label>
+            <input type="text" name="aname"
+                   placeholder="Enter your area"
+                   required>
+        </div>
+
+        <div class="ss-reg-group">
+            <label>City *</label>
+
+            <select name="city" required>
+                <option value="">Select your city</option>
+
+                <%
+                    while(cityRs.next()) {
+                %>
+                <option value="<%=cityRs.getString(1)%>">
+                    <%=cityRs.getString(1)%>
+                </option>
+                <%
+                    }
+                    cityRs.close();
+                    cityPs.close();
+                %>
+
+            </select>
+        </div>
+
+        <div class="ss-reg-group">
+            <label>Mobile Number *</label>
+            <input type="text" name="mobile"
+                   placeholder="Enter 10-digit mobile number"
+                   maxlength="10" required>
+        </div>
+
+        <div class="ss-reg-group">
+            <label>Email Address (User ID) *</label>
+            <input type="email" name="email"
+                   placeholder="Enter your email address"
+                   required>
+        </div>
+
+        <div class="ss-reg-group">
+            <label>Password *</label>
+            <input type="password" name="pwd"
+                   placeholder="Create a password"
+                   required>
+        </div>
+
+        <div class="ss-reg-group">
+            <label>Confirm Password *</label>
+            <input type="password" name="cpwd"
+                   placeholder="Confirm your password"
+                   required>
+        </div>
+
+        <button type="submit" name="submit1"
+                value="Register" class="ss-reg-submit">
+            Create Seller Account
+        </button>
+
     </form>
 
+    <div class="ss-reg-footer">
+        Already have an account?
+        <a href="sellers.jsp">Login Here</a>
+    </div>
 
-<!--<form name="f" action="sregn.jsp" method="post" onsubmit="return check()">
-            <table class="login_tab">
-                <thead>
-                    <tr>
-                        <th colspan="2">SELLER REGISTRATION</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>Name</th>
-                        <td><input type="text" name="name" required autofocus></td>   
-                    </tr>
-                    <tr>
-                        <th>Address</th>
-                        <td><textarea name="addr" required></textarea></td>
-                    </tr>
-                    <tr>
-                        <th>Area Name</th>
-                        <td><input type="text" name="aname" required></td>   
-                    </tr>
-                    <tr>
-                        <th>City</th>
-                        <td><select name="city" required>
-                            <%--
-                                    while(rs1.next()) {
-                                        out.print("<option value='"+rs1.getString(1)+"'>"+rs1.getString(1)+"</option>");
-                                    }
-                                    ps1.close();
-                                --%>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Mobile</th>
-                        <td><input type="text" name="mobile" required maxlength="10"></td>
-                    </tr>
-                    <tr>
-                        <th>EMail (User Id)</th>
-                        <td><input type="text" name="email" required></td>
-                    </tr>
-                    <tr>
-                        <th>Password</th>
-                        <td><input type="password" name="pwd" required></td>
-                    </tr>                    
-                    <tr>
-                        <th>Confirm Pwd</th>
-                        <td><input type="password" name="cpwd" required></td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="2">
-                            <input type="submit" name="submit1" value="Register">
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </form>-->
+</div>
+```
+
+</div>
+
 <%
-    } else {
-        name = request.getParameter("name");
-        addr = request.getParameter("addr");
-        aname = request.getParameter("aname");
-        city = request.getParameter("city");
-        mobile = request.getParameter("mobile");
-        userid = request.getParameter("email");
-        pwd = request.getParameter("pwd");
-int k=0;
-        
-        ps1 = conn.prepareStatement("insert into newuser(name,addr,aname,city,mobile,userid,pwd,utype) values (?,?,?,?,?,?,?,?)");
-    ps1.setString(1, name);
-    ps1.setString(2, addr);
-    ps1.setString(3, aname);
-    ps1.setString(4, city);
-    ps1.setString(5, mobile);
-    ps1.setString(6, userid);
-    ps1.setString(7, pwd);
-    ps1.setString(8, "seller");
-try {
-    k = ps1.executeUpdate();
-} catch(Exception e) {}
-    ps1.close();
-    if(k>0)
-    out.print("<div class='center'>Seller Id generated Successfully...!<br><a href='sellers.jsp'>Login</a></div>");
-    else
-    out.print("<div class='center'>Duplicate Id...! Try Again...!<br><a href='sregn.jsp'>Register</a></div>");
-    }
+} else {
+
+
+    String name = request.getParameter("name");
+    String addr = request.getParameter("addr");
+    String aname = request.getParameter("aname");
+    String city = request.getParameter("city");
+    String mobile = request.getParameter("mobile");
+    String userid = request.getParameter("email");
+    String pwd = request.getParameter("pwd");
+    String cpwd = request.getParameter("cpwd");
+
+    int k = 0;
+
+    if(pwd == null || !pwd.equals(cpwd)) {
+
+
 %>
+
+<div class="ss-reg-message">
+    Passwords do not match!
+    <br>
+    <a href="sregn.jsp">Try Again</a>
+</div>
+
+<%
+} else {
+
+
+        PreparedStatement insertPs = null;
+
+        try {
+
+            insertPs = conn.prepareStatement(
+                "insert into newuser(name,addr,aname,city,mobile,userid,pwd,utype) values (?,?,?,?,?,?,?,?)"
+            );
+
+            insertPs.setString(1, name);
+            insertPs.setString(2, addr);
+            insertPs.setString(3, aname);
+            insertPs.setString(4, city);
+            insertPs.setString(5, mobile);
+            insertPs.setString(6, userid);
+            insertPs.setString(7, pwd);
+            insertPs.setString(8, "seller");
+
+            k = insertPs.executeUpdate();
+
+        } catch(Exception e) {
+            k = 0;
+        } finally {
+            if(insertPs != null) {
+                try { insertPs.close(); } catch(Exception e) {}
+            }
+        }
+
+        if(k > 0) {
+
+
+%>
+
+<div class="ss-reg-message">
+    Seller Account Created Successfully!
+    <br>
+    <a href="sellers.jsp">Login Now</a>
+</div>
+
+<%
+} else {
+%>
+
+<div class="ss-reg-message">
+    Registration Failed! This User ID may already exist.
+    <br>
+    <a href="sregn.jsp">Try Again</a>
+</div>
+
+<%
+}
+}
+}
+%>
+
 <script>
-    function check() {
-        var m = f.mobile.value
-        var e = f.email.value
-        var pw = f.pwd.value
-        var cp = f.cpwd.value
-        
-        var mp = /^[9876]\d{9}$/
-        var ep = /^\w+\.{0,1}\w+\@\w+\.([a-z]{3}|[a-z]{2}\.[a-z]{2}){1}$/
-        
-        if(!m.match(mp)) {
-            alert("Invalid Mobile Number")
-            f.mobile.focus()
-            return false
+    function validateSellerForm() {
+
+        var mobile = document.f.mobile.value;
+        var email = document.f.email.value;
+        var password = document.f.pwd.value;
+        var confirmPassword = document.f.cpwd.value;
+
+        var mobilePattern = /^[9876][0-9]{9}$/;
+
+        if(!mobilePattern.test(mobile)) {
+            alert("Please enter a valid 10-digit mobile number.");
+            document.f.mobile.focus();
+            return false;
         }
-        if(!e.match(ep)) {
-            alert("Invalid EMail Id")
-            f.email.focus()
-            return false
+
+        if(!document.f.email.checkValidity()) {
+            alert("Please enter a valid email address.");
+            document.f.email.focus();
+            return false;
         }
-        if(pw!=cp) {
-            alert("Confirm Password not Match")
-            f.cpwd.focus()
-            return false
+
+        if(password !== confirmPassword) {
+            alert("Passwords do not match.");
+            document.f.cpwd.focus();
+            return false;
         }
-        return true
+
+        return true;
     }
 </script>
+
 <%@include file="footer.jsp" %>

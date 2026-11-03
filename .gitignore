@@ -8,3 +8,5 @@ dist/
 nbproject/private/
 .DS_Store
 Thumbs.db
+ClassifiedShop/lib/mysql-connector-j-8.0/
+ClassifiedShop/web/web/

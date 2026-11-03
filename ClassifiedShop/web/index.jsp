@@ -1,222 +1,161 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <!-- basic -->
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <!-- mobile metas -->
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-      <!-- site metas -->
-      <title>Online Classified Shop</title>
-      <meta name="keywords" content="">
-      <meta name="description" content="">
-      <meta name="author" content="">
-      <!-- bootstrap css -->
-      <link rel="stylesheet" href="css/bootstrap.min.css">
-      <!-- style css -->
-      <link rel="stylesheet" href="css/style.css">
-      <!-- Responsive-->
-      <link rel="stylesheet" href="css/responsive.css">
-      <!-- fevicon -->
-      <link rel="icon" href="images/fevicon.png" type="image/gif" />            
-   </head>
-   <!-- body -->
-    <body class="main-layout">
-      <!-- loader  -->
-      <div class="loader_bg">
-         <div class="loader"><img src="images/loading.gif" alt="#"/></div>
-      </div>
-      <!-- end loader -->
-      <!-- header -->
-      <div class="header">
-         <div class="container-fluid">
-            <div class="row d_flex">
-               <div class=" col-md-2 col-sm-3 col logo_section">
-                  <div class="full">
-                     <div class="center-desk">
-                        <div class="logo">
-                           <a href="index.jsp"><img src="images/logo.png" alt="#" /></a>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-md-8 col-sm-12">
-                  <nav class="navigation navbar navbar-expand-md navbar-dark ">
-                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
-                     <span class="navbar-toggler-icon"></span>
-                     </button>
-                     <div class="collapse navbar-collapse" id="navbarsExample04">
-                        <ul class="navbar-nav mr-auto">
-                           <li class="nav-item active">
-                              <a class="nav-link" href="index.jsp">Home</a>
-                           </li>
-                           <li class="nav-item">
-                              <a class="nav-link" href="admin.jsp">Admin</a>
-                           </li>
-                           <li class="nav-item">
-                              <a class="nav-link" href="user.jsp">User</a>
-                           </li>
-                           <li class="nav-item">
-                              <a class="nav-link" href="sellers.jsp">Sellers</a>
-                           </li>
-                           <li class="nav-item">
-                              <a class="nav-link" href="shops.jsp">Shops</a>
-                           </li>
-                        </ul>
-                     </div>
-                  </nav>
-               </div>
-               <div class="col-md-2">
-                  <!--ul class="email text_align_right">
-                     <li class="d_none"><a href="Javascript:void(0)"><i class="fa fa-user" aria-hidden="true"></i></a></li>
-                     <li class="d_none"> <a href="Javascript:void(0)"><i class="fa fa-search" style="cursor: pointer;" aria-hidden="true"></i></a> </li>
-                  </ul-->
-               </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shop Sphere | Everything You Need, All in One Place</title>
+    <meta name="description" content="Discover products, connect with sellers and explore shops on Shop Sphere.">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/shop-sphere.css">
+</head>
+<body class="ss-home">
+
+<header class="ss-header">
+    <div class="container">
+        <nav class="ss-nav">
+            <a class="ss-brand" href="index.jsp" aria-label="Shop Sphere home">
+                <span class="ss-brand-mark">S</span>
+                <span class="ss-brand-copy">
+                    <strong>SHOP <em>SPHERE</em></strong>
+                    <small>Everything You Need, All in One Place</small>
+                </span>
+            </a>
+
+            <button class="ss-menu-toggle" type="button" data-toggle="collapse"
+                    data-target="#shopSphereNav" aria-controls="shopSphereNav"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+
+            <div class="collapse navbar-collapse ss-nav-links" id="shopSphereNav">
+                <a class="active" href="index.jsp">Home</a>
+                <a href="admin.jsp">Admin</a>
+                <a href="user.jsp">User</a>
+                <a href="sellers.jsp">Sellers</a>
+                <a href="shops.jsp">Shops</a>
+                <a class="ss-nav-cta" href="user.jsp">Get started <span aria-hidden="true">→</span></a>
             </div>
-         </div>
-      </div>
-      <!-- end header inner -->
-      <!-- end header -->
-      <!-- top -->
-      <div class="full_bg">
-         <div class="slider_main">
-            <div class="container-fluid">
-               <div class="row">
-                  <div class="col-md-12">
-                     <!-- carousel code -->
-                     <div id="carouselExampleIndicators" class="carousel slide">
-                        <ol class="carousel-indicators">
-                           <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                           <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                           <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                        </ol>
-                        <div class="carousel-inner">
-                           <!-- first slide -->
-                           <div class="carousel-item active">
-                              <div class="carousel-caption relative">
-                                 <div class="row d_flex">
-                                    <div  class="col-md-5">
-                                       <div class="board">
-                                          <i><img src="images/top_icon.png" alt="#"/></i>
-                                          <h3>
-                                             Online<br> Classified<br> Shop
-                                          </h3>
-                                          <div class="link_btn">
-                                             <a class="read_more" href="Javascript:void(0)">Read More   <span></span></a>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="col-md-7">
-                                       <div class="banner_img">
-                                          <figure><img class="img_responsive" src="images/banner_img.png"></figure>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                           <!-- second slide -->
-                           <div class="carousel-item">
-                              <div class="carousel-caption relative">
-                                 <div class="row d_flex">
-                                    <div  class="col-md-5">
-                                       <div class="board">
-                                          <i><img src="images/top_icon.png" alt="#"/></i>
-                                          <h3>
-                                             Online<br> Classified<br> Shop
-                                          </h3>
-                                          <div class="link_btn">
-                                             <a class="read_more" href="Javascript:void(0)">Read More   <span></span></a>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="col-md-7">
-                                       <div class="banner_img">
-                                          <figure><img class="img_responsive" src="images/banner_img1.png"></figure>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                           <!-- third slide-->
-                           <div class="carousel-item">
-                              <div class="carousel-caption relative">
-                                 <div class="row d_flex">
-                                    <div  class="col-md-5">
-                                       <div class="board">
-                                          <i><img src="images/top_icon.png" alt="#"/></i>
-                                          <h3>
-                                             Online<br> Classified<br> Shop
-                                          </h3>
-                                          <div class="link_btn">
-                                             <a class="read_more" href="Javascript:void(0)">Read More   <span></span></a>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="col-md-7">
-                                       <div class="banner_img">
-                                          <figure><img class="img_responsive" src="images/banner_img.png"></figure>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section class="ss-hero">
+        <div class="ss-hero-orb ss-orb-one"></div>
+        <div class="ss-hero-orb ss-orb-two"></div>
+        <div class="container ss-hero-inner">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <div class="ss-eyebrow"><span></span> YOUR MARKETPLACE, MADE SIMPLE</div>
+                    <h1>Find what you need.<br><span>Love what you discover.</span></h1>
+                    <p class="ss-hero-text">
+                        One simple place to explore products, connect with sellers
+                        and discover shops. Welcome to a smarter way to shop.
+                    </p>
+                    <div class="ss-hero-actions">
+                        <a class="ss-button ss-button-primary" href="user.jsp">Explore as a user <span>→</span></a>
+                        <a class="ss-button ss-button-outline" href="sellers.jsp">I'm a seller</a>
+                    </div>
+                    <div class="ss-trust-line">
+                        <span class="ss-trust-icon">✓</span>
+                        Easy to explore <b>·</b> Simple to connect <b>·</b> All in one place
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="ss-hero-art" aria-label="Shop Sphere marketplace illustration">
+                        <div class="ss-art-glow"></div>
+                        <div class="ss-art-card ss-art-card-back">
+                            <span class="ss-art-label">DISCOVER</span>
+                            <div class="ss-art-lines"><i></i><i></i><i></i></div>
                         </div>
-                        <!-- controls -->
-                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                        <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                        <span class="sr-only">Next</span>
-                        </a>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-      <!-- end banner -->
-      <!-- our class -->
-      <div class="class">
-         <div class="container">
-                        
-         </div>
-      </div>
-      <!-- end our class -->      
-      <!--  footer -->
-      <footer>
-         <div class="footer">            
-            <div class="copyright">
-               <div class="container">
-                  <div class="row">
-                     <div class="col-md-8">
-                         <p>� <%=new java.text.SimpleDateFormat("Y").format(new java.util.Date())%> All Rights Reserved.</p>
+                        <div class="ss-art-card ss-art-card-main">
+                            <div class="ss-art-top"><span class="ss-art-dot"></span><span class="ss-art-dot"></span><span class="ss-art-dot"></span></div>
+                            <div class="ss-art-bag">S</div>
+                            <strong>Your next great find<br>is just around the corner.</strong>
+                            <small>SHOP • CONNECT • DISCOVER</small>
                         </div>
-                      <div class="col-md-4">
-                          <p></p>
-                          <ul class="social_icon" style="float: right;">
-    <li><a href="Javascript:void(0)"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-    <li><a href="Javascript:void(0)"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-    <li><a href="Javascript:void(0)"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a></li>
-    <li><a href="Javascript:void(0)"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-    </ul>                      
-                     </div>
-                  </div>
-               </div>
+                        <div class="ss-float-tag ss-tag-one"><span>✦</span> Find something new</div>
+                        <div class="ss-float-tag ss-tag-two"><span>✓</span> Simple experience</div>
+                    </div>
+                </div>
             </div>
-         </div>
-      </footer>
-      <!-- end footer -->
-      <!-- Javascript files-->
-      <script src="js/jquery.min.js"></script>
-      <script src="js/bootstrap.bundle.min.js"></script>
-      <script src="js/jquery-3.0.0.min.js"></script>
-      <!-- sidebar -->
-      <script src="js/custom.js"></script>
-      <script>
-         AOS.init();
-      </script>
-   </body>
+        </div>
+        <div class="ss-hero-bottom"></div>
+    </section>
+
+    <section class="ss-quick-section">
+        <div class="container">
+            <div class="ss-section-heading">
+                <div>
+                    <span class="ss-kicker">GET STARTED</span>
+                    <h2>A space for everyone.</h2>
+                    <p>Choose how you want to use Shop Sphere.</p>
+                </div>
+            </div>
+            <div class="row ss-role-row">
+                <div class="col-md-4">
+                    <a class="ss-role-card" href="user.jsp">
+                        <span class="ss-role-icon ss-icon-user">♡</span>
+                        <span class="ss-role-arrow">↗</span>
+                        <h3>I'm a User</h3>
+                        <p>Explore the marketplace and find products that interest you.</p>
+                        <strong>Continue as user <span>→</span></strong>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a class="ss-role-card" href="sellers.jsp">
+                        <span class="ss-role-icon ss-icon-seller">↗</span>
+                        <span class="ss-role-arrow">↗</span>
+                        <h3>I'm a Seller</h3>
+                        <p>Connect with customers and manage your selling activity.</p>
+                        <strong>Continue as seller <span>→</span></strong>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a class="ss-role-card" href="shops.jsp">
+                        <span class="ss-role-icon ss-icon-shop">⌂</span>
+                        <span class="ss-role-arrow">↗</span>
+                        <h3>I'm a Shop</h3>
+                        <p>Bring your shop online and reach people through one platform.</p>
+                        <strong>Explore shops <span>→</span></strong>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ss-bottom-cta">
+        <div class="container">
+            <div class="ss-cta-panel">
+                <div>
+                    <span class="ss-kicker">WELCOME TO SHOP SPHERE</span>
+                    <h2>Everything you need,<br>all in one place.</h2>
+                    <p>Start exploring the marketplace today.</p>
+                </div>
+                <a class="ss-button ss-button-light" href="user.jsp">Get started <span>→</span></a>
+                <div class="ss-cta-decoration">S</div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="ss-footer">
+    <div class="container ss-footer-inner">
+        <a class="ss-brand ss-footer-brand" href="index.jsp">
+            <span class="ss-brand-mark">S</span>
+            <span class="ss-brand-copy">
+                <strong>SHOP <em>SPHERE</em></strong>
+                <small>Everything You Need, All in One Place</small>
+            </span>
+        </a>
+        <p>© <%= java.time.Year.now() %> Shop Sphere. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

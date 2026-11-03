@@ -1,91 +1,241 @@
-<%@include file="userheader.jsp" %><%!
-    PreparedStatement ps1 = null;
-    ResultSet rs1 = null;
+<%@include file="userheader.jsp" %>
+
+<%!
+PreparedStatement ps1 = null;
+ResultSet rs1 = null;
 %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interested Products</title>
-    <style>
-        .page-header {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #dc3545;
-            padding-bottom: 10px;
+
+<style>
+    .interest-page {
+        padding: 30px 4%;
+        background: #f6f8fc;
+        min-height: 75vh;
+    }
+
+    .interest-heading {
+        color: #14233f;
+        font-size: 27px;
+        font-weight: 700;
+        margin: 15px 0 5px;
+    }
+
+    .interest-subtitle {
+        color: #788398;
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    .interest-section {
+        margin-bottom: 45px;
+    }
+
+    .interest-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #14233f;
+        font-size: 21px;
+        font-weight: 700;
+        margin: 25px 0 18px;
+    }
+
+    .interest-title span {
+        background: #fff0e5;
+        color: #ff8a35;
+        padding: 9px 12px;
+        border-radius: 10px;
+        font-size: 17px;
+    }
+
+    .interest-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+        gap: 22px;
+    }
+
+    .interest-card {
+        background: #ffffff;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid #e9edf4;
+        box-shadow: 0 5px 18px rgba(20, 35, 63, 0.06);
+        transition: 0.3s ease;
+    }
+
+    .interest-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(20, 35, 63, 0.12);
+    }
+
+    .interest-image {
+        height: 190px;
+        background: #f1f3f7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .interest-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 10px;
+    }
+
+    .interest-details {
+        padding: 18px;
+    }
+
+    .interest-category {
+        display: inline-block;
+        background: #fff0e5;
+        color: #ed7929;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .interest-model {
+        font-size: 17px;
+        font-weight: 700;
+        color: #14233f;
+        margin: 5px 0;
+    }
+
+    .interest-brand {
+        color: #7c8798;
+        font-size: 13px;
+        margin-bottom: 13px;
+    }
+
+    .interest-price {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 15px;
+    }
+
+    .offer-price {
+        color: #14233f;
+        font-size: 19px;
+        font-weight: 700;
+    }
+
+    .original-price {
+        color: #9ba3af;
+        font-size: 13px;
+        text-decoration: line-through;
+    }
+
+    .interest-info {
+        border-top: 1px solid #edf0f5;
+        padding-top: 12px;
+        margin-top: 10px;
+        color: #657186;
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    .interest-date {
+        color: #8b95a5;
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+
+    .remove-btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        background: #fff0ef;
+        color: #dc4545;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        margin-top: 15px;
+        transition: 0.3s;
+    }
+
+    .remove-btn:hover {
+        background: #dc4545;
+        color: white;
+        text-decoration: none;
+    }
+
+    .empty-interest {
+        background: white;
+        border: 1px dashed #d7deea;
+        border-radius: 13px;
+        padding: 35px 15px;
+        text-align: center;
+        color: #8792a4;
+        font-size: 14px;
+    }
+
+    .empty-interest strong {
+        display: block;
+        color: #14233f;
+        font-size: 16px;
+        margin-bottom: 7px;
+    }
+
+    @media(max-width: 600px) {
+        .interest-page {
+            padding: 20px 15px;
         }
 
-        .page-header small {
-            font-size: 1.5rem;
-            color: #6c757d;
+        .interest-heading {
+            font-size: 23px;
         }
 
-        .report_tab {
-            width: 70%;
-            border-collapse: collapse;
-            margin: 20px auto;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            overflow: hidden;
+        .interest-grid {
+            grid-template-columns: 1fr;
         }
+    }
+</style>
 
-        .report_tab thead th {
-            background-color: #007bff;
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-size: 16px;
-        }
+<%
+if (request.getParameter("npid") != null) {
+ps1 = conn.prepareStatement("DELETE FROM ninterest WHERE id=?");
+ps1.setString(1, request.getParameter("npid"));
+ps1.executeUpdate();
+ps1.close();
+}
 
-        .report_tab th, .report_tab td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
 
-        .report_tab tr:hover {
-            background-color: #f1f1f1;
-        }
+if (request.getParameter("opid") != null) {
+    ps1 = conn.prepareStatement("DELETE FROM ointerest WHERE id=?");
+    ps1.setString(1, request.getParameter("opid"));
+    ps1.executeUpdate();
+    ps1.close();
+}
 
-        .center {
-            text-align: center;
-        }
 
-        .right {
-            text-align: right;
-        }
+%>
 
-        .btn-remove {
-            color: #dc3545;
-            text-decoration: none;
-        }
+<div class="interest-page">
 
-        .btn-remove:hover {
-            text-decoration: underline;
-        }
+```
+<h1 class="interest-heading">My Interested Products</h1>
+<p class="interest-subtitle">All the products you have saved in one place.</p>
 
-        .btn-img {
-            width: 50px;
-        }
-    </style>
-</head>
-<body>
-    <h1 class="page-header">Interested <small>New Products</small></h1>
+<!-- NEW PRODUCTS -->
+
+<div class="interest-section">
+
+    <h2 class="interest-title">
+    <span>NEW</span> Interested New Products
+</h2>
+
+    <div class="interest-grid">
+
     <%
-        if (request.getParameter("npid") != null) {
-            ps1 = conn.prepareStatement("DELETE FROM ninterest WHERE id=?");
-            ps1.setString(1, request.getParameter("npid"));
-            ps1.executeUpdate();
-            ps1.close();
-        }
-
-        if (request.getParameter("opid") != null) {
-            ps1 = conn.prepareStatement("DELETE FROM ointerest WHERE id=?");
-            ps1.setString(1, request.getParameter("opid"));
-            ps1.executeUpdate();
-            ps1.close();
-        }
+        boolean newProductsFound = false;
 
         ps1 = conn.prepareStatement(
             "SELECT i.id, i.dt, cname, brand, modelname, price, oprice, name, mobile, fn1 " +
@@ -93,122 +243,181 @@
             "JOIN newproduct p ON i.pid = p.id " +
             "JOIN newuser n ON p.shopid = n.userid " +
             "WHERE i.userid = ?");
+
         ps1.setString(1, session.getAttribute("userid").toString().trim());
         rs1 = ps1.executeQuery();
 
-        out.print("<table class='report_tab'><thead><tr>");
-        out.print("<th>Date<th>Category<th>Brand<th>Model Name<th>Price<th>Offer Price<th>Shop Name<th>Mobile<th>Image<th>Task<tbody>");
-        
         while (rs1.next()) {
-            out.print("<tr>");
-            out.print("<td>" + rs1.getString(2) + "</td>");
-            out.print("<td>" + rs1.getString(3) + "</td>");
-            out.print("<td>" + rs1.getString(4) + "</td>");
-            out.print("<td>" + rs1.getString(5) + "</td>");
-            out.print("<td>Rs." + rs1.getString(6) + "</td>");
-            out.print("<td>Rs." + rs1.getString(7) + "</td>");
-            out.print("<td>" + rs1.getString(8) + "</td>");
-            out.print("<td>" + rs1.getString(9) + "</td>");
-            out.print("<td class='center'><img src='uploads/" + rs1.getString(10) + "' class='btn-img'></td>");
-            out.print("<td class='right'><a href='vuinterest.jsp?npid=" + rs1.getString(1) + "' class='btn-remove' onclick=\"return confirm('Are you sure to remove?')\">Remove</a></td>");
-            out.print("</tr>");
-        }
-        out.print("</table>");
-        ps1.close();
+            newProductsFound = true;
     %>
 
-    <h1 class="page-header">Interested <small>Used Products</small></h1>
+        <div class="interest-card">
+
+            <div class="interest-image">
+                <img src="uploads/<%=rs1.getString(10)%>" alt="Product Image">
+            </div>
+
+            <div class="interest-details">
+
+                <span class="interest-category">
+                    <%=rs1.getString(3)%>
+                </span>
+
+                <div class="interest-model">
+                    <%=rs1.getString(5)%>
+                </div>
+
+                <div class="interest-brand">
+                    Brand: <%=rs1.getString(4)%>
+                </div>
+
+                <div class="interest-price">
+                    <span class="offer-price">
+                        Rs. <%=rs1.getString(7)%>
+                    </span>
+
+                    <span class="original-price">
+                        Rs. <%=rs1.getString(6)%>
+                    </span>
+                </div>
+
+                <div class="interest-info">
+                    <div>? Shop: <%=rs1.getString(8)%></div>
+                    <div>? Mobile: <%=rs1.getString(9)%></div>
+                </div>
+
+                <div class="interest-date">
+                    Added on: <%=rs1.getString(2)%>
+                </div>
+
+                <a href="vuinterest.jsp?npid=<%=rs1.getString(1)%>"
+                   class="remove-btn"
+                   onclick="return confirm('Are you sure you want to remove this product?')">
+                    Remove Interest
+                </a>
+
+            </div>
+        </div>
+
     <%
+        }
+
+        rs1.close();
+        ps1.close();
+
+        if (!newProductsFound) {
+    %>
+
+        <div class="empty-interest">
+            <strong>No New Products Yet!</strong>
+            You haven't added any new products to your interests.
+        </div>
+
+    <%
+        }
+    %>
+
+    </div>
+</div>
+
+
+<!-- USED PRODUCTS -->
+
+<div class="interest-section">
+
+    <h2 class="interest-title">
+    <span>USED</span> Interested Used Products
+</h2>
+
+    <div class="interest-grid">
+
+    <%
+        boolean oldProductsFound = false;
+
         ps1 = conn.prepareStatement(
             "SELECT i.id, i.dt, cname, brand, modelname, price, oprice, name, mobile, fn1 " +
             "FROM ointerest i " +
             "JOIN oldproduct p ON i.pid = p.id " +
             "JOIN newuser n ON p.sellerid = n.userid " +
             "WHERE i.userid = ?");
+
         ps1.setString(1, session.getAttribute("userid").toString().trim());
         rs1 = ps1.executeQuery();
 
-        out.print("<table class='report_tab'><thead><tr>");
-        out.print("<th>Date<th>Category<th>Brand<th>Model Name<th>Price<th>Offer Price<th>Owner Name<th>Mobile<th>Image<th>Task<tbody>");
-        
         while (rs1.next()) {
-            out.print("<tr>");
-            out.print("<td>" + rs1.getString(2) + "</td>");
-            out.print("<td>" + rs1.getString(3) + "</td>");
-            out.print("<td>" + rs1.getString(4) + "</td>");
-            out.print("<td>" + rs1.getString(5) + "</td>");
-            out.print("<td>Rs." + rs1.getString(6) + "</td>");
-            out.print("<td>Rs." + rs1.getString(7) + "</td>");
-            out.print("<td>" + rs1.getString(8) + "</td>");
-            out.print("<td>" + rs1.getString(9) + "</td>");
-            out.print("<td class='center'><img src='uploads/" + rs1.getString(10) + "' class='btn-img'></td>");
-            out.print("<td class='right'><a href='vuinterest.jsp?opid=" + rs1.getString(1) + "' class='btn-remove' onclick=\"return confirm('Are you sure to remove?')\">Remove</a></td>");
-            out.print("</tr>");
-        }
-        out.print("</table>");
-        ps1.close();
+            oldProductsFound = true;
     %>
 
-    <%@include file="footer.jsp" %>
-</body>
-</html>
+        <div class="interest-card">
 
+            <div class="interest-image">
+                <img src="uploads/<%=rs1.getString(10)%>" alt="Product Image">
+            </div>
 
-<%--<%@include file="userheader.jsp" %><%!
-    PreparedStatement ps1=null;
-    ResultSet rs1=null;
-%>
-<h1 class="page-header">Interested <small>New Products</small></h1>
-<%
-    if(request.getParameter("npid")!=null) {
-        ps1 = conn.prepareStatement("delete from ninterest where id=?");
-        ps1.setString(1, request.getParameter("npid"));
-        ps1.executeUpdate();
+            <div class="interest-details">
+
+                <span class="interest-category">
+                    <%=rs1.getString(3)%>
+                </span>
+
+                <div class="interest-model">
+                    <%=rs1.getString(5)%>
+                </div>
+
+                <div class="interest-brand">
+                    Brand: <%=rs1.getString(4)%>
+                </div>
+
+                <div class="interest-price">
+                    <span class="offer-price">
+                        Rs. <%=rs1.getString(7)%>
+                    </span>
+
+                    <span class="original-price">
+                        Rs. <%=rs1.getString(6)%>
+                    </span>
+                </div>
+
+                <div class="interest-info">
+                    <div>? Owner: <%=rs1.getString(8)%></div>
+                    <div>? Mobile: <%=rs1.getString(9)%></div>
+                </div>
+
+                <div class="interest-date">
+                    Added on: <%=rs1.getString(2)%>
+                </div>
+
+                <a href="vuinterest.jsp?opid=<%=rs1.getString(1)%>"
+                   class="remove-btn"
+                   onclick="return confirm('Are you sure you want to remove this product?')">
+                    Remove Interest
+                </a>
+
+            </div>
+        </div>
+
+    <%
+        }
+
+        rs1.close();
         ps1.close();
-    }
-    if(request.getParameter("opid")!=null) {
-        ps1 = conn.prepareStatement("delete from ointerest where id=?");
-        ps1.setString(1, request.getParameter("opid"));
-        ps1.executeUpdate();
-        ps1.close();
-    }
-    ps1 = conn.prepareStatement("select i.id,i.dt,cname,brand,modelname,price,oprice,name,mobile,fn1 from ninterest i,newproduct p,newuser n where i.pid=p.id and p.shopid=n.userid and i.userid=?");
-    ps1.setString(1, session.getAttribute("userid").toString().trim());
-    rs1 = ps1.executeQuery();
-    out.print("<table class='report_tab' style='min-width:70%;'><thead><tr><th>Date<th>Category<th>Brand<th>Model Name<th>Price<th>Offer Price<th>Shop Name<th>Mobile<th>Image<th>Task<tbody>");
-    while(rs1.next()) {        
-            out.print("<tr><td>"+rs1.getString(2));
-            out.print("<td>"+rs1.getString(3));
-            out.print("<td>"+rs1.getString(4));
-            out.print("<td>"+rs1.getString(5));
-            out.print("<td>"+rs1.getString(6));
-            out.print("<td>"+rs1.getString(7));
-            out.print("<td>"+rs1.getString(8));
-            out.print("<td>"+rs1.getString(9));
-            out.print("<td class='center'><img src='uploads/"+rs1.getString(10)+"' width='50px'>");
-            out.print("<td class='right'><a href='vuinterest.jsp?npid="+rs1.getString(1)+"' onclick=\"javascript:return confirm('Are You Sure to Remove ?')\">Remove</a>");
-    }
-    out.print("</table>");
-    ps1.close();
-%>
-<h1 class="page-header">Interested <small>Used Products</small></h1>
-<%
-    ps1 = conn.prepareStatement("select i.id,i.dt,cname,brand,modelname,price,oprice,name,mobile,fn1 from ointerest i,oldproduct p,newuser n where i.pid=p.id and p.sellerid=n.userid and i.userid=?");
-    ps1.setString(1, session.getAttribute("userid").toString().trim());
-    rs1 = ps1.executeQuery();
-    out.print("<table class='report_tab' style='min-width:70%;'><thead><tr><th>Date<th>Category<th>Brand<th>Model Name<th>Price<th>Offer Price<th>Owner Name<th>Mobile<th>Image<th>Task<tbody>");
-    while(rs1.next()) {        
-            out.print("<tr><td>"+rs1.getString(2));
-            out.print("<td>"+rs1.getString(3));
-            out.print("<td>"+rs1.getString(4));
-            out.print("<td>"+rs1.getString(5));
-            out.print("<td>"+rs1.getString(6));
-            out.print("<td>"+rs1.getString(7));
-            out.print("<td>"+rs1.getString(8));
-            out.print("<td>"+rs1.getString(9));
-            out.print("<td class='center'><img src='uploads/"+rs1.getString(10)+"' width='50px'>");
-            out.print("<td class='right'><a href='vuinterest.jsp?opid="+rs1.getString(1)+"' onclick=\"javascript:return confirm('Are You Sure to Remove ?')\">Remove</a>");
-    }
-    out.print("</table>");
-    ps1.close();
-%><%@include file="footer.jsp" %>--%>
+
+        if (!oldProductsFound) {
+    %>
+
+        <div class="empty-interest">
+            <strong>No Used Products Yet!</strong>
+            You haven't added any used products to your interests.
+        </div>
+
+    <%
+        }
+    %>
+
+    </div>
+</div>
+```
+
+</div>
+
+<%@include file="footer.jsp" %>

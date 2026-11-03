@@ -1,192 +1,287 @@
-<%@include file="adminheader.jsp" %><%!
-    PreparedStatement ps1=null;
-    ResultSet rs1=null;
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@include file="adminheader.jsp" %>
+
+<%!
+PreparedStatement ps1 = null;
+ResultSet rs1 = null;
 %>
 
-    <title>Admin Home</title>
-    <style>
-        /* Centering and styling the navigation container */
-        .nav-center {
-            text-align: center;
-            margin-bottom: 20px;
+<style>
+    .ss-shop-page {
+        padding: 30px 15px 50px;
+        font-family: Arial, sans-serif;
+        background: #f7f9fc;
+    }
+
+    .ss-shop-heading {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .ss-shop-heading h1 {
+        color: #14233f;
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 10px;
+    }
+
+    .ss-shop-heading p {
+        color: #7b8494;
+        font-size: 14px;
+    }
+
+    .ss-shop-nav {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin: 0 auto 30px;
+    }
+
+    .ss-shop-nav a {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 150px;
+        padding: 12px 22px;
+        border: 1px solid #14233f;
+        border-radius: 8px;
+        color: #14233f;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 700;
+        transition: 0.3s;
+    }
+
+    .ss-shop-nav a:hover,
+    .ss-shop-nav .active {
+        background: #14233f;
+        color: white;
+    }
+
+    .ss-shop-card {
+        max-width: 1200px;
+        margin: auto;
+        background: white;
+        padding: 25px;
+        border-radius: 14px;
+        box-shadow: 0 5px 25px rgba(20,35,63,0.08);
+        border: 1px solid #edf0f5;
+    }
+
+    .ss-shop-card-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .ss-shop-card-title h3 {
+        color: #14233f;
+        font-size: 21px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .ss-shop-badge {
+        background: #fff1e5;
+        color: #e87924;
+        padding: 9px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .ss-shop-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .ss-shop-table {
+        width: 100%;
+        min-width: 850px;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    .ss-shop-table thead {
+        background: #14233f;
+        color: white;
+    }
+
+    .ss-shop-table th {
+        padding: 16px 12px;
+        text-align: left;
+        white-space: nowrap;
+        font-weight: 600;
+    }
+
+    .ss-shop-table td {
+        padding: 15px 12px;
+        color: #4b5565;
+        border-bottom: 1px solid #edf0f5;
+    }
+
+    .ss-shop-table tbody tr:hover {
+        background: #f5f8fc;
+    }
+
+    .ss-shop-delete {
+        display: inline-block;
+        padding: 8px 16px;
+        color: white;
+        background: #dc4545;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+        transition: 0.3s;
+        white-space: nowrap;
+    }
+
+    .ss-shop-delete:hover {
+        background: #b92e2e;
+        color: white;
+        text-decoration: none;
+    }
+
+    .ss-shop-empty {
+        text-align: center;
+        padding: 35px !important;
+        color: #8992a1 !important;
+        font-size: 15px;
+    }
+
+    @media(max-width: 768px) {
+        .ss-shop-heading h1 {
+            font-size: 25px;
         }
 
-        /* Styling the navigation links */
-        .nav-link {
-            display: inline-block;
-            margin: 0 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #4CAF50; /* Green color for text */
-            text-decoration: none;
-            border: 2px solid #4CAF50;
-            border-radius: 5px;
-            transition: background-color 0.3s ease, color 0.3s ease;
+        .ss-shop-card {
+            padding: 15px;
         }
+    }
+</style>
 
-        /* Hover effect for the navigation links */
-        .nav-link:hover {
-            background-color: #4CAF50;
-            color: white;
-        }
+<%
+if(request.getParameter("duserid") != null) {
 
-        /* Styling the page header */
-        .page-header {
-            text-align: center;
-            font-size: 2em;
-            margin-bottom: 30px;
-            color: #333;
-            border-bottom: 2px solid #4CAF50;
-            display: inline-block;
-            padding-bottom: 10px;
-        }
 
-        /* Styling the small text in the header */
-        .page-header small {
-            font-size: 0.6em;
-            color: #888;
-        }
-    </style>
+    ps1 = conn.prepareStatement(
+        "delete from newuser where userid=?"
+    );
 
-    <!-- Navigation Links -->
-    <div class="nav-center">
-        <a href="adminhome.jsp" class="nav-link">Users List</a>
-        <a href="avsellers.jsp" class="nav-link">Sellers List</a>
-        <a href="avshops.jsp" class="nav-link">Shop List</a>
+    ps1.setString(1, request.getParameter("duserid"));
+    ps1.executeUpdate();
+    ps1.close();
+}
+
+ps1 = conn.prepareStatement(
+    "select * from newuser where utype='shop'"
+);
+
+rs1 = ps1.executeQuery();
+
+boolean hasShops = false;
+
+
+%>
+
+<div class="ss-shop-page">
+
+```
+<div class="ss-shop-heading">
+    <h1>Shops Management</h1>
+    <p>View and manage all registered shops in SHOP SPHERE.</p>
+</div>
+
+<div class="ss-shop-nav">
+    <a href="adminhome.jsp">Users List</a>
+    <a href="avsellers.jsp">Sellers List</a>
+    <a href="avshops.jsp" class="active">Shop List</a>
+</div>
+
+<div class="ss-shop-card">
+
+    <div class="ss-shop-card-title">
+        <h3>Registered Shops</h3>
+        <span class="ss-shop-badge">Shop Directory</span>
     </div>
 
-    <!-- Page Header -->
-    <h1 class="page-header">Shops <small>List</small></h1>
+    <div class="ss-shop-table-wrapper">
 
+        <table class="ss-shop-table">
 
-<!--<center>
-    <a href="adminhome.jsp" class="btn-outline-success">Users List</a> |
-    <a href="avsellers.jsp" class="btn-outline-success">Sellers List</a> |
-    <a href="avshops.jsp" class="btn-outline-success">Shop List</a>
-</center>
-<h1 class="page-header">Shops <small>List</small></h1>-->
+            <thead>
+                <tr>
+                    <th>Shop Name</th>
+                    <th>Address</th>
+                    <th>Area</th>
+                    <th>City</th>
+                    <th>Mobile</th>
+                    <th>User ID</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
 
-    <title>View Shops</title>
-    <style>
-        /* General Table Styling */
-        .report_table {
-            width: 70%;
-            border-collapse: collapse;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 20px auto; /* Centering the table horizontally */
-            max-width: 1000px;
-        }
+            <tbody>
 
-        /* Table Header Styling */
-        .report_table thead th {
-            background-color: #FABC3F;
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-size: 16px;
-        }
-
-        /* Table Cell Styling */
-        .report_table th, .report_table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        /* Table Row Hover Effect */
-        .report_table tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        /* Right-Aligned Text */
-        .right {
-            text-align: right;
-        }
-
-        /* Responsive Table Styling */
-        @media (max-width: 768px) {
-            .report_table {
-                display: block;
-                overflow-x: auto;
-                white-space: nowrap;
-            }
-        }
-
-        /* Button Styling */
-        .btn-delete {
-            color: #dc3545;
-            text-decoration: none;
-        }
-
-        .btn-delete:hover {
-            text-decoration: underline;
-        }
-    </style>
-
-    <%
-        if(request.getParameter("duserid") != null) {
-            ps1 = conn.prepareStatement("delete from newuser where userid=?");
-            ps1.setString(1, request.getParameter("duserid"));
-            ps1.executeUpdate();
-            ps1.close();
-        }
-        ps1 = conn.prepareStatement("select * from newuser where utype='shop'");
-        rs1 = ps1.executeQuery();
-    %>
-    <table class="report_table">
-        <thead>
-            <tr>
-                <th>Shop Name</th>
-                <th>Address</th>
-                <th>Area</th>
-                <th>City</th>
-                <th>Mobile</th>
-                <th>UserId</th>
-                <th>Task</th>
-            </tr>
-        </thead>
-        <tbody>
             <%
                 while(rs1.next()) {
-                    out.print("<tr>");
-                    out.print("<td>" + rs1.getString(1) + "</td>");
-                    out.print("<td>" + rs1.getString(2) + "</td>");
-                    out.print("<td>" + rs1.getString(3) + "</td>");
-                    out.print("<td>" + rs1.getString(4) + "</td>");
-                    out.print("<td>" + rs1.getString(5) + "</td>");
-                    out.print("<td>" + rs1.getString(6) + "</td>");
-                    out.print("<td class='right'><a href='avshops.jsp?duserid=" + rs1.getString(6) + "' class='btn-delete' onclick=\"javascript:return confirm('Are You Sure to Delete ?')\">Delete</a></td>");
-                    out.print("</tr>");
+
+                    hasShops = true;
+            %>
+
+                <tr>
+                    <td><%=rs1.getString(1)%></td>
+                    <td><%=rs1.getString(2)%></td>
+                    <td><%=rs1.getString(3)%></td>
+                    <td><%=rs1.getString(4)%></td>
+                    <td><%=rs1.getString(5)%></td>
+                    <td><%=rs1.getString(6)%></td>
+
+                    <td>
+                        <a
+                            href="avshops.jsp?duserid=<%=java.net.URLEncoder.encode(rs1.getString(6), "UTF-8")%>"
+                            class="ss-shop-delete"
+                            onclick="return confirm('Are you sure you want to delete this shop?');">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+
+            <%
                 }
+
+                if(!hasShops) {
+            %>
+
+                <tr>
+                    <td colspan="7" class="ss-shop-empty">
+                        No registered shops found.
+                    </td>
+                </tr>
+
+            <%
+                }
+
+                rs1.close();
                 ps1.close();
             %>
-        </tbody>
-    </table>
-    <%@include file="footer.jsp" %>
 
+            </tbody>
 
+        </table>
 
-<%--
-    if(request.getParameter("duserid")!=null) {
-        ps1 = conn.prepareStatement("delete from newuser where userid=?");
-        ps1.setString(1, request.getParameter("duserid"));
-        ps1.executeUpdate();
-        ps1.close();
-    }
-    ps1 = conn.prepareStatement("select * from newuser where utype='shop'");
-    rs1 = ps1.executeQuery();
-    out.print("<table class='report_tab' style='min-width:70%;'><thead><tr><th>Shop Name<th>Address<th>Area<th>City<th>Mobile<th>UserId<th>Task<tbody>");
-    while(rs1.next()) {        
-            out.print("<tr><td>"+rs1.getString(1));
-            out.print("<td>"+rs1.getString(2));
-            out.print("<td>"+rs1.getString(3));
-            out.print("<td>"+rs1.getString(4));
-            out.print("<td>"+rs1.getString(5));
-            out.print("<td>"+rs1.getString(6));
-            out.print("<td class='right'><a href='avshops.jsp?duserid="+rs1.getString(6)+"' onclick=\"javascript:return confirm('Are You Sure to Delete ?')\">Delete</a>");
-    }
-    out.print("</table>");
-    ps1.close();
-    %><%@include file="footer.jsp" --%>
+    </div>
+
+</div>
+```
+
+</div>
+
+<%@include file="footer.jsp" %>
